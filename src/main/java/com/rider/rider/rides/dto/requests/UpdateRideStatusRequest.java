@@ -1,26 +1,16 @@
 package com.rider.rider.rides.dto.requests;
 
 import com.rider.rider.rides.enums.RideStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.UUID;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateRideStatusRequest {
-    public UUID getRideId() {
-        return rideId;
-    }
-
-    public void setRideId(UUID rideId) {
-        this.rideId = rideId;
-    }
-
-    private UUID rideId;
+    private String rideId;
     private RideStatus rideStatus;
-
-    public RideStatus getRideStatus() {
-        return rideStatus;
-    }
-
-    public void setRideStatus(RideStatus rideStatus) {
-        this.rideStatus = rideStatus;
-    }
 }

@@ -1,17 +1,14 @@
 package com.rider.rider.users.dto.responses;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserSignupResponse {
     private String userId;
-
-    public UserSignupResponse(String id) {
-        this.userId = id;
-    }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

@@ -1,19 +1,15 @@
 package com.rider.rider.rides.dto.responses;
 
-import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateRideResponse {
-    private UUID rideId;
-
-    public CreateRideResponse(UUID rideId) {
-        this.rideId = rideId;
-    }
-
-    public UUID getRideId() {
-        return rideId;
-    }
-
-    public void setRideId(UUID rideId) {
-        this.rideId = rideId;
-    }
+    private String rideId;
 }

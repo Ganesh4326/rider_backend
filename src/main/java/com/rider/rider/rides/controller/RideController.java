@@ -4,13 +4,13 @@ import com.rider.rider.rides.dto.requests.AttachRideToPartnerRequest;
 import com.rider.rider.rides.dto.requests.CreateRideRequest;
 import com.rider.rider.rides.dto.requests.UpdateRideStatusRequest;
 import com.rider.rider.rides.dto.responses.CreateRideResponse;
+import com.rider.rider.rides.dto.responses.GetAllRidesResponse;
 import com.rider.rider.rides.dto.responses.GetRideResponse;
 import com.rider.rider.rides.service.RideService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/rides")
@@ -22,8 +22,13 @@ public class RideController {
     }
 
     @GetMapping("/{rideId}")
-    public Optional<GetRideResponse> createRide(@PathVariable UUID rideId) {
+    public Optional<GetRideResponse> getRide(@PathVariable String rideId) {
         return rideService.getRideById(rideId);
+    }
+
+    @GetMapping("/all")
+    public GetAllRidesResponse getAllRides() {
+        return rideService.getAllRides();
     }
 
     @PostMapping("/create")
@@ -31,7 +36,7 @@ public class RideController {
         return rideService.createRide(createRideRequest);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/status")
     public ResponseEntity<Void> updateRideStatus(@RequestBody UpdateRideStatusRequest updateRideStatusRequest) {
         this.rideService.updateRideStatus(updateRideStatusRequest);
         return ResponseEntity.ok().build();

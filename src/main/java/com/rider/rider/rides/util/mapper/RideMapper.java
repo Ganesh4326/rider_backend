@@ -1,14 +1,12 @@
 package com.rider.rider.rides.util.mapper;
 
 import com.rider.rider.partners.utils.mapper.PartnerMapper;
-import com.rider.rider.rides.dto.normals.RideLocationNormal;
+import com.rider.rider.ratings.utils.mapper.RatingMapper;
 import com.rider.rider.rides.dto.normals.RideNormal;
 import com.rider.rider.rides.entity.Ride;
-import com.rider.rider.rides.entity.RideLocation;
-import com.rider.rider.rides.enums.RideLocationType;
+import com.rider.rider.users.utils.mapper.UserMapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RideMapper {
@@ -16,78 +14,68 @@ public class RideMapper {
     public static RideNormal toNormal(Ride ride) {
         if (ride == null) return null;
 
-        return new RideNormal(
-                ride.getRideId(),
-                null, // If needed: UserMapper.toDto(ride.getUser())
-                PartnerMapper.toNormal(ride.getPartner()),
-                ride.getCreatedTime(),
-                ride.getUpdatedTime(),
-                ride.getStartTime(),
-                ride.getEndTime(),
-                ride.getRequestedTime(),
-                ride.getAcceptedTime(),
-                ride.getStatus(),
-                ride.getRideType(),
-                ride.getDropAddress(),
-                ride.getPickupAddress(),
-                mapToRideLocationNormal(ride.getLocations().stream()
-                        .filter(loc -> loc.getLocationType() == RideLocationType.PICKUP)
-                        .findFirst().orElse(null)),
-                mapToRideLocationNormal(ride.getLocations().stream()
-                        .filter(loc -> loc.getLocationType() == RideLocationType.DROP)
-                        .findFirst()
-                        .orElse(null)),
-                ride.getTracking() != null
-                        ? ride.getTracking().stream()
-                        .map(RideTrackingMapper::toNormal)
-                        .collect(Collectors.toList())
-                        : null,
-                RidePaymentMapper.toNormal(ride.getRidePayment()),
-                ride.getRideStatus(),
-                ride.getEstimatedDuration(),
-                ride.getActualDuration()
-        );
+        RideNormal normal = new RideNormal();
+        normal.setRideId(ride.getId().toString());
+        normal.setCreatedAt(ride.getCreatedAt());
+        normal.setUpdatedAt(ride.getUpdatedAt());
+        normal.setUser(UserMapper.toNormal(ride.getUser()));
+        normal.setPartner(PartnerMapper.toNormal(ride.getPartner()));
+        normal.setRideLocationInfo(RideLocationInfoMapper.toNormal(ride.getRideLocationInfo()));
+        normal.setRideTimingInfo(RideTimingInfoMapper.toNormal(ride.getRideTimingInfo()));
+        normal.setRidePaymentInfo(RidePaymentInfoMapper.toNormal(ride.getRidePaymentInfo()));
+
+        if (ride.getTrackings() != null) {
+            normal.setRideTracking(
+                    ride.getTrackings()
+                            .stream()
+                            .map(RideTrackingMapper::toNormal)
+                            .collect(Collectors.toList())
+            );
+        }
+
+        if (ride.getRideRequest() != null && ride.getRideRequest().getId() != null) {
+            normal.setRideRequestId(ride.getRideRequest().getId().toString());
+        } else {
+            normal.setRideRequestId(null);
+        }
+//        normal.setRating(RatingMapper.toNormal(ride.getRating()));
+        normal.setRideStatus(ride.getRideStatus());
+        normal.setRideType(ride.getRideType());
+
+        return normal;
     }
 
-    public static Ride toEntity(RideNormal dto) {
-        if (dto == null) return null;
+    public static Ride toEntity(RideNormal normal) {
+        if (normal == null) return null;
 
         Ride ride = new Ride();
-        ride.setRideId(dto.getRideId());
-        // ride.setUser(UserMapper.toEntity(dto.getUser())); // If needed
-        ride.setPartner(PartnerMapper.toEntity(dto.getPartner()));
-        ride.setCreatedTime(dto.getCreatedTime());
-        ride.setUpdatedTime(dto.getUpdatedTime());
-        ride.setStartTime(dto.getStartTime());
-        ride.setEndTime(dto.getEndTime());
-        ride.setRequestedTime(dto.getRequestedTime());
-        ride.setAcceptedTime(dto.getAcceptedTime());
-        ride.setStatus(dto.getStatus());
-        ride.setRideType(dto.getRideType());
-        ride.setDropAddress(dto.getDropAddress());
-        ride.setPickupAddress(dto.getPickupAddress());
-        List<RideLocation> rideLocationList = new ArrayList<>();
-        rideLocationList.add(RideLocationMapper.toEntity(dto.getPickupLocation(), ride));
-        rideLocationList.add(RideLocationMapper.toEntity(dto.getDropLocation(), ride));
-        ride.setLocations(rideLocationList);
-        ride.setTracking(dto.getRideTracking() != null
-                ? dto.getRideTracking().stream()
-                .map(RideTrackingMapper::toEntity)
-                .collect(Collectors.toList())
-                : null);
-        ride.setRidePayment(RidePaymentMapper.toEntity(dto.getRidePayment()));
-        ride.setRideStatus(dto.getRideStatus());
-        ride.setEstimatedDuration(dto.getEstimatedDuration());
-        ride.setActualDuration(dto.getActualDuration());
+        if (normal.getRideId() != null) {
+            ride.setId(UUID.fromString(normal.getRideId()));
+        }
+
+        ride.setCreatedAt(normal.getCreatedAt());
+        ride.setUpdatedAt(normal.getUpdatedAt());
+
+        ride.setUser(UserMapper.toEntity(normal.getUser()));
+        ride.setPartner(PartnerMapper.toEntity(normal.getPartner()));
+        ride.setRideLocationInfo(RideLocationInfoMapper.toEntity(normal.getRideLocationInfo()));
+        ride.setRideTimingInfo(RideTimingInfoMapper.toEntity(normal.getRideTimingInfo()));
+        ride.setRidePaymentInfo(RidePaymentInfoMapper.toEntity(normal.getRidePaymentInfo()));
+
+        if (normal.getRideTracking() != null) {
+            ride.setTrackings(
+                    normal.getRideTracking()
+                            .stream()
+                            .map(RideTrackingMapper::toEntity)
+                            .collect(Collectors.toList())
+            );
+        }
+
+//        ride.setRating(RatingMapper.toEntity(normal.getRating()));
+//        ride.setRideRequest(normal.getRideRequestId());
+        ride.setRideStatus(normal.getRideStatus());
+        ride.setRideType(normal.getRideType());
 
         return ride;
     }
-
-    private static RideLocationNormal mapToRideLocationNormal(RideLocation location) {
-        RideLocationNormal rideLocationNormal = new RideLocationNormal();
-        rideLocationNormal.setLatitude(location.getLatitude());
-        rideLocationNormal.setLongitude(location.getLongitude());
-        return rideLocationNormal;
-    }
-
 }

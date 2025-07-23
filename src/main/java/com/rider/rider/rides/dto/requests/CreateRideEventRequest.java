@@ -1,27 +1,17 @@
 package com.rider.rider.rides.dto.requests;
 
 import com.rider.rider.rides.enums.RideStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.UUID;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateRideEventRequest {
-    private UUID rideId;
+    private String rideId;
     private RideStatus rideEventType;
-
-    public RideStatus getRideEventType() {
-        return rideEventType;
-    }
-
-    public void setRideEventType(RideStatus rideEventType) {
-        this.rideEventType = rideEventType;
-    }
-
-    public UUID getRideId() {
-        return rideId;
-    }
-
-    public void setRideId(UUID rideId) {
-        this.rideId = rideId;
-    }
 
 }

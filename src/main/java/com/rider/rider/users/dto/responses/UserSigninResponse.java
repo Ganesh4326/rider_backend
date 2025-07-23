@@ -1,13 +1,14 @@
 package com.rider.rider.users.dto.responses;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserSigninResponse {
-    private final String token;
-
-    public UserSigninResponse(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
+    private String token;
 }
