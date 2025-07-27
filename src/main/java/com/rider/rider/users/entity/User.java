@@ -2,6 +2,7 @@ package com.rider.rider.users.entity;
 
 import com.rider.rider.core.entity.BaseEntity;
 import com.rider.rider.users.enums.Gender;
+import com.rider.rider.users.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +31,9 @@ public class User extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Enumerated
     @Column(name = "role", nullable = false)
-    private String role;
+    private UserRole role;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")

@@ -17,6 +17,7 @@ import com.rider.rider.rides.entity.Ride;
 import com.rider.rider.rides.service.RideService;
 import com.rider.rider.rides.util.mapper.RideMapper;
 import com.rider.rider.users.entity.User;
+import com.rider.rider.users.enums.UserRole;
 import com.rider.rider.users.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,14 @@ public class PartnerService implements PartnerServiceInterface {
         partnerLocation.setLatitude(createPartnerRequest.getPartnerLocationLatitude());
         partnerLocation.setLongitude(createPartnerRequest.getPartnerLocationLongitude());
 
-        //user
-        User user = userService.getUserById(UUID.fromString(createPartnerRequest.getUserId())).orElseThrow(() -> new RuntimeException("User not found"));
+        //create user
+
+        User user = new User();
+        user.setName(createPartnerRequest.getName());
+        user.setEmail(createPartnerRequest.getEmail());
+        user.setPassword(createPartnerRequest.getPassword());
+        user.setPhone(createPartnerRequest.getPhone());
+        user.setRole(UserRole.PARTNER);
 
         partner.setUser(user);
         partner.setRating(0.0);

@@ -32,7 +32,7 @@ public class Partner extends BaseEntity {
     @JoinColumn(name = "current_location_id")
     private Location currentLocation;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 

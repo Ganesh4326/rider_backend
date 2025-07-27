@@ -1,6 +1,7 @@
 package com.rider.rider.users.dto.normals;
 
 import com.rider.rider.users.enums.Gender;
+import com.rider.rider.users.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class UserNormal {
     private String name;
     private String phone;
     private String password;
-    private String role;
+    private UserRole role;
     private Gender gender;
     private LocalDateTime dateOfBirth;
 }

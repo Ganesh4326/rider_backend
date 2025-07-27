@@ -1,6 +1,9 @@
 package com.rider.rider.users.service;
 
+import com.rider.rider.users.dto.requests.UserSignupRequest;
+import com.rider.rider.users.dto.responses.UserSignupResponse;
 import com.rider.rider.users.entity.User;
+import com.rider.rider.users.enums.UserRole;
 import com.rider.rider.users.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,4 +49,15 @@ public class UserService {
 //        User savedUser = userRepository.save(user);
 //        return new UserSignupResponse(savedUser.getId().toString());
 //    }
+
+    public UserSignupResponse createUser(UserSignupRequest userSigninRequest) {
+        User user = new User();
+        user.setEmail(userSigninRequest.getEmail());
+        user.setName(userSigninRequest.getName());
+        user.setPhone(userSigninRequest.getPhone());
+        user.setPassword(userSigninRequest.getPassword());
+        user.setRole(UserRole.USER);
+        User savedUser = this.userRepository.save(user);
+        return new UserSignupResponse(savedUser.getId().toString());
+    }
 }
